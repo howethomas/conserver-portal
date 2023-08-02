@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 
     export let name;
+    export let index;
     let link = {};
 
     function safe_display(value) {
@@ -25,8 +26,11 @@
 {:else}
     <div class="overflow-hidden bg-indigo-100 shadow sm:rounded-lg m-3">
         <div class="px-4 py-6 sm:px-6">
-            <h3 class="text-base font-semibold leading-7 text-gray-900">Link {name}</h3>
-            <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Links represent a functionality block; chains are constructed from links, which can be used more than once.</p>
+            {#if index == null}
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Link: {name}</h3>
+            {:else}
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Link {index}: {name}</h3>
+            {/if}
         </div>
         <div class="border-t border-gray-100">
             <dl class="divide-y divide-gray-100">
