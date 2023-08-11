@@ -1,24 +1,15 @@
 <script>
-    import { redis_cmd } from '$lib/redis_cmd.js';
+    import { config }  from '$lib/config.js';
 	import { onMount } from 'svelte';
+    import { safe_display } from '$lib/utils.js';
+    
 
-    export let name;
-    export let index;
+    export let name = "unassigned";
+    export let index = 0;
     let link = {};
 
-    function safe_display(value) {
-        if (typeof(value) == "object") {
-            return JSON.stringify(value)
-        } else {
-            return value
-        }
-    }
-
     onMount(async () => {
-        let cmd_array = ["JSON.GET","link:"+name]
-        let host_url = 'http://localhost:7379/'
-        let link_str = await redis_cmd(cmd_array, host_url)
-        link = JSON.parse(link_str)
+        link = $config['links'][name]
     });
 </script>
 {#if Object.keys(link).length === 0}
