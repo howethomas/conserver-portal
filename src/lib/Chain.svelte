@@ -1,26 +1,15 @@
 <script>
-    import { redis_cmd } from '$lib/redis_cmd.js';
 	import { onMount } from 'svelte';
     import Link from '$lib/Link.svelte';
+    import {config}  from '$lib/config.js';
+    import { safe_display } from '$lib/utils.js';
 
-    export let name;
+    export let name ="unassigned";
     let chain = {};
-    let links = [];
-
-    function safe_display(value) {
-        if (typeof(value) == "object") {
-            return JSON.stringify(value)
-        } else {
-            return value
-        }
-    }
 
     onMount(async () => {
-        let cmd_array = ["JSON.GET", name]
-        let host_url = 'http://localhost:7379/'
-        let chain_str = await redis_cmd(cmd_array, host_url)
-        chain = JSON.parse(chain_str)
-        links = chain.links
+        chain = $config['chains'][name]
+        console.log("Chain name: ", name)
         console.log(chain)
     });
 </script>
@@ -70,7 +59,7 @@
     
             </div>
             <div class="col-span-2">
-                {#each links as link, index}
+                {#each chain.links as link, index}
                     <Link name={link} index={index} />
                 {/each}
             </div>

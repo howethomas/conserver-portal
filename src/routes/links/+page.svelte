@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from "svelte";
-	import {redis_cmd} from '$lib/redis_cmd.js';
+	import { config }  from '$lib/config.js';
 	import Link from '$lib/Link.svelte';
 
 	/**
@@ -14,17 +14,19 @@
 	let ready = false;
 
 	onMount(async () => {
-		// Get the list of chains
-		let cmd_array = ["KEYS", "chain:*"]
-		chains = await redis_cmd(cmd_array)
-
-		// Get the list of links
-		cmd_array = ["KEYS", "link:*"]
-		let keys = await redis_cmd(cmd_array)
-
-		// the keys have a prefix of "link:" or "chain:"; remove it
-		links = keys.map((key) => key.slice(5))
-		ready = true;
+		if (!$config) {
+			fetch("http://localhost:8000"+ "/config")
+			.then(response => response.json())
+			.then(data => {
+				config.set(data);
+				links = Object.keys(data.links);
+				ready = true;
+			});
+		}
+		else {
+			links = Object.keys($config.links);
+			ready = true;
+		}
 	});
 </script>
 
@@ -39,8 +41,8 @@
 
 {:else}
 	<div class="grid grid-cols-3 gap-4">
-		{#each links as link}
-			<Link name={link} />
+		{#each links as link, index}
+			<Link name={link} index=index/>
 		{/each}
 	</div>
 {/if}
