@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from "svelte";
-	import {redis_cmd} from '$lib/redis_cmd.js';
 	import Chain from '$lib/Chain.svelte';
 	import {config}  from '$lib/config.js';
 

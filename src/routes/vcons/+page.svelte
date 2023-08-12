@@ -2,14 +2,17 @@
     import VconLoader from '$lib/VconLoader.svelte';
 	import { onMount } from 'svelte';
     
-    // On mount, load the list of vcon keys in REDIS
     /**
 	 * @type {any[]}
 	 */
     let vcon_keys = [];
     let ready = false;
 
-    onMount(async () => {
+    onMount(async () => { 
+        // Get the list of vcon ids using REST
+        let response = await fetch("http://localhost:8000"+ "/vcon");
+        let data = await response.json();
+        vcon_keys = data;
         ready = true;
     });
 
