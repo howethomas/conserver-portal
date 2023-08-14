@@ -34,8 +34,8 @@
   /* Add some styling here if needed */
 </style>
 
-<div>
-  <label for="jsonFile">Select a JSON file:</label>
+<div class="text-xs">
+  <label for="jsonFile">Upload a vCon file:</label>
   <input type="file" id="jsonFile" accept=".json" on:change={handleChange} />
 </div>
 
